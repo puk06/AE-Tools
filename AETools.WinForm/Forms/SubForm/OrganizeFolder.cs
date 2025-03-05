@@ -68,75 +68,85 @@ public partial class OrganizeFolder : Form
 
     private void OrganizeFolderButton_Click(object sender, EventArgs e)
     {
-        OrganizeFolderButton.Enabled = false;
-
-        if (string.IsNullOrEmpty(dataFolderPath) || string.IsNullOrEmpty(dataOutputDestination))
+        try
         {
-            MessageBox.Show("データフォルダまたはデータ出力先フォルダが選択されていません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            OrganizeFolderButton.Enabled = true;
-            return;
-        }
+            OrganizeFolderButton.Enabled = false;
 
-        if (!Directory.Exists(dataFolderPath) || !Directory.Exists(dataOutputDestination))
-        {
-            MessageBox.Show("選択されたフォルダが存在しません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            OrganizeFolderButton.Enabled = true;
-            return;
-        }
+            if (string.IsNullOrEmpty(dataFolderPath) || string.IsNullOrEmpty(dataOutputDestination))
+            {
+                MessageBox.Show("データフォルダまたはデータ出力先フォルダが選択されていません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OrganizeFolderButton.Enabled = true;
+                return;
+            }
 
-        if (Directory.Exists(dataOutputDestination) && Directory.GetFiles(dataOutputDestination).Length > 0)
-        {
-            var result = MessageBox.Show("データ出力先フォルダにある既存のデータは削除されます。よろしいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.No)
+            if (!Directory.Exists(dataFolderPath) || !Directory.Exists(dataOutputDestination))
+            {
+                MessageBox.Show("選択されたフォルダが存在しません。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OrganizeFolderButton.Enabled = true;
+                return;
+            }
+
+            if (Directory.Exists(dataOutputDestination) && Directory.GetFiles(dataOutputDestination).Length > 0)
+            {
+                var result = MessageBox.Show("データ出力先フォルダにある既存のデータは削除されます。よろしいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    OrganizeFolderButton.Enabled = true;
+                    return;
+                }
+            }
+
+            var confirmDialogResult = MessageBox.Show("この操作は、データフォルダ内のファイルをコピーし、新しいフォルダに貼り付けます。\nこの操作は、データフォルダ内のファイルをコピーするため、容量を多く消費します。続行しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirmDialogResult == DialogResult.No)
             {
                 OrganizeFolderButton.Enabled = true;
                 return;
             }
-        }
 
-        var confirmDialogResult = MessageBox.Show("この操作は、データフォルダ内のファイルをコピーし、新しいフォルダに貼り付けます。\nこの操作は、データフォルダ内のファイルをコピーするため、容量を多く消費します。続行しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-        if (confirmDialogResult == DialogResult.No)
-        {
-            OrganizeFolderButton.Enabled = true;
-            return;
-        }
-
-        var aEDatabase = DatabaseHelper.LoadAEDatabase(Path.Combine(dataFolderPath, "ItemsData.json"));
-        if (aEDatabase == null)
-        {
-            MessageBox.Show("AvatarExplorerのデータの読み込みに失敗しました。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            OrganizeFolderButton.Enabled = true;
-            return;
-        }
-
-        if (Directory.Exists(dataOutputDestination)) Directory.Delete(dataOutputDestination, true);
-        Directory.CreateDirectory(dataOutputDestination);
-
-        OrganizeAvatarExplorerItems(aEDatabase.Items, dataFolderPath, dataOutputDestination);
-
-        MessageBox.Show("データの整理が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        var result2 = MessageBox.Show("今回作成したフォルダを元に新しいデータベースを作成しますか？\nもし作成するなら、現在Avatar Explorerを起動中の場合は閉じることをおすすめします！", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-        if (result2 == DialogResult.Yes)
-        {
-            try
+            var aEDatabase = DatabaseHelper.LoadAEDatabase(Path.Combine(dataFolderPath, "ItemsData.json"));
+            if (aEDatabase == null)
             {
-                var oldPath = Path.Combine(dataFolderPath, "ItemsData.json");
-                var newPath = Path.Combine(dataFolderPath, "ItemsData.json.old");
-                File.Move(oldPath, newPath);
-
-                DatabaseHelper.SaveAEDatabase(oldPath, aEDatabase.Items);
-                MessageBox.Show("選択されたDatasフォルダ内に新しいデータベースを作成しました。\n元々のファイルはItemsData.json.oldに改名してあります。戻したい場合は、ItemsData.jsonを削除し、ItemsData.json.oldをItemsData.jsonに改名してください。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("AvatarExplorerのデータの読み込みに失敗しました。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OrganizeFolderButton.Enabled = true;
+                return;
             }
-            catch (Exception ex)
+
+            if (Directory.Exists(dataOutputDestination)) Directory.Delete(dataOutputDestination, true);
+            Directory.CreateDirectory(dataOutputDestination);
+
+            OrganizeAvatarExplorerItems(aEDatabase.Items, dataFolderPath, dataOutputDestination);
+
+            MessageBox.Show("データの整理が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            var result2 = MessageBox.Show("今回作成したフォルダを元に新しいデータベースを作成しますか？\nもし作成するなら、現在Avatar Explorerを起動中の場合は閉じることをおすすめします！", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result2 == DialogResult.Yes)
             {
-                MessageBox.Show("新しいデータベースの作成に失敗しました。\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+                try
+                {
+                    var oldPath = Path.Combine(dataFolderPath, "ItemsData.json");
+                    var newPath = Path.Combine(dataFolderPath, "ItemsData.json.old");
+                    File.Move(oldPath, newPath);
 
-        OrganizeFolderButton.Enabled = true;
-        DataOrganizeProgressBar.Value = 0;
-        Text = BASE_FORM_TEXT;
+                    DatabaseHelper.SaveAEDatabase(oldPath, aEDatabase.Items);
+                    MessageBox.Show("選択されたDatasフォルダ内に新しいデータベースを作成しました。\n元々のファイルはItemsData.json.oldに改名してあります。戻したい場合は、ItemsData.jsonを削除し、ItemsData.json.oldをItemsData.jsonに改名してください。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("新しいデータベースの作成に失敗しました。\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            OrganizeFolderButton.Enabled = true;
+            DataOrganizeProgressBar.Value = 0;
+            Text = BASE_FORM_TEXT;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("データの整理中にエラーが発生しました。\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            OrganizeFolderButton.Enabled = true;
+            DataOrganizeProgressBar.Value = 0;
+            Text = BASE_FORM_TEXT;
+        }
     }
 
     private void OrganizeAvatarExplorerItems(AvatarExplorerItem[] items, string source, string destination)
