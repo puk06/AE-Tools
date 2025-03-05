@@ -1,5 +1,6 @@
 ﻿using AETools.Core.Helper;
 using AETools.Core.Models.AssetHelper;
+using System.Runtime.InteropServices;
 
 namespace AETools.WinForm.SubForm;
 
@@ -103,5 +104,24 @@ public partial class AssetHelper : Form
         ResetForm();
         Visible = false;
         e.Cancel = true;
+    }
+
+    private void SuggestedBoothItemList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        var selected = SuggestedBoothItemList.SelectedItem?.ToString();
+        if (string.IsNullOrWhiteSpace(selected)) return;
+
+        var url = selected.Split(" - ");
+        if (url.Length < 2) return;
+
+        try
+        {
+            Clipboard.SetText("https://booth.pm/ja/items/" + url[0]);
+        }
+        catch (Exception ex)
+        {
+            if (ex is ExternalException) return;
+            MessageBox.Show("クリップボードへのコピーに失敗しました。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 }

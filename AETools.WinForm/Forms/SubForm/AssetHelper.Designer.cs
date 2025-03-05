@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             AssetDatabaseFileLabel = new Label();
             OpenDatabaseFile = new Button();
             DataBaseFileLabel = new Label();
@@ -98,6 +97,7 @@
             SuggestedBoothItemList.Name = "SuggestedBoothItemList";
             SuggestedBoothItemList.Size = new Size(772, 235);
             SuggestedBoothItemList.TabIndex = 6;
+            SuggestedBoothItemList.SelectedIndexChanged += SuggestedBoothItemList_SelectedIndexChanged;
             // 
             // SuggestedBoothItemLabel
             // 
@@ -126,11 +126,11 @@
             Name = "AssetHelper";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "アセット登録支援ツール";
+            FormClosing += AssetHelper_FormClosing;
             DragDrop += AssetHelper_DragDrop;
             DragEnter += AssetHelper_DragEnter;
             ResumeLayout(false);
             PerformLayout();
-            this.FormClosing += AssetHelper_FormClosing;
         }
 
         #endregion
