@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AETools.Core", "AETools.Core\AETools.Core.csproj", "{CE291054-CDD5-4395-AC06-097914FB23BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AETools.WinForm", "AETools.WinForm\AETools.WinForm.csproj", "{6537D991-E9D2-431E-B240-69F840C70759}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE291054-CDD5-4395-AC06-097914FB23BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE291054-CDD5-4395-AC06-097914FB23BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE291054-CDD5-4395-AC06-097914FB23BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE291054-CDD5-4395-AC06-097914FB23BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6537D991-E9D2-431E-B240-69F840C70759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6537D991-E9D2-431E-B240-69F840C70759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6537D991-E9D2-431E-B240-69F840C70759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6537D991-E9D2-431E-B240-69F840C70759}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4D60A76-EEBA-4A4F-A0DF-4314992F315A}
+	EndGlobalSection
+EndGlobal
