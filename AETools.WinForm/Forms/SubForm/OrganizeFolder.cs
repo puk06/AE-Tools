@@ -1,4 +1,5 @@
 ﻿using AETools.Core.Helper;
+using AETools.Core.Models.AvatarExplorer;
 
 namespace AETools.WinForm.SubForm;
 
@@ -111,10 +112,39 @@ public partial class OrganizeFolder : Form
         if (Directory.Exists(dataOutputDestination)) Directory.Delete(dataOutputDestination, true);
         Directory.CreateDirectory(dataOutputDestination);
 
-        var totalItems = aEDatabase.Items.Length;
+        OrganizeAvatarExplorerItems(aEDatabase.Items, dataFolderPath, dataOutputDestination);
+
+        MessageBox.Show("データの整理が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        var result2 = MessageBox.Show("今回作成したフォルダを元に新しいデータベースを作成しますか？\nもし作成するなら、現在Avatar Explorerを起動中の場合は閉じることをおすすめします！", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        if (result2 == DialogResult.Yes)
+        {
+            try
+            {
+                var oldPath = Path.Combine(dataFolderPath, "ItemsData.json");
+                var newPath = Path.Combine(dataFolderPath, "ItemsData.json.old");
+                File.Move(oldPath, newPath);
+
+                DatabaseHelper.SaveAEDatabase(oldPath, aEDatabase.Items);
+                MessageBox.Show("選択されたDatasフォルダ内に新しいデータベースを作成しました。\n元々のファイルはItemsData.json.oldに改名してあります。戻したい場合は、ItemsData.jsonを削除し、ItemsData.json.oldをItemsData.jsonに改名してください。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("新しいデータベースの作成に失敗しました。\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        OrganizeFolderButton.Enabled = true;
+        DataOrganizeProgressBar.Value = 0;
+        Text = BASE_FORM_TEXT;
+    }
+
+    private void OrganizeAvatarExplorerItems(AvatarExplorerItem[] items, string source, string destination)
+    {
+        var totalItems = items.Length;
 
         var currentProgress = 0;
-        foreach (var item in aEDatabase.Items)
+        foreach (var item in items)
         {
             var itemFolderPath = item.ItemPath.Replace("./Datas", dataFolderPath);
             var thumbnailPath = item.ImagePath.Replace("./Datas", dataFolderPath);
@@ -141,33 +171,10 @@ public partial class OrganizeFolder : Form
             }
 
             currentProgress++;
-            DataOrganizeProgressBar.Value = (int)((double)currentProgress / aEDatabase.Items.Length * 100);
+            DataOrganizeProgressBar.Value = (int)((double)currentProgress / totalItems * 100);
             Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataOrganizeProgressBar.Value}%)";
         }
 
-        MessageBox.Show("データの整理が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        var result2 = MessageBox.Show("今回作成したフォルダを元に新しいデータベースを作成しますか？\nもし作成するなら、現在Avatar Explorerを起動中の場合は閉じることをおすすめします！", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-        if (result2 == DialogResult.Yes)
-        {
-            try
-            {
-                var oldPath = Path.Combine(dataFolderPath, "ItemsData.json");
-                var newPath = Path.Combine(dataFolderPath, "ItemsData.json.old");
-                File.Move(oldPath, newPath);
-
-                DatabaseHelper.SaveAEDatabase(oldPath, aEDatabase.Items);
-                MessageBox.Show("選択されたDatasフォルダ内に新しいデータベースを作成しました。\n元々のファイルはItemsData.json.oldに改名してあります。戻したい場合は、ItemsData.jsonを削除し、ItemsData.json.oldをItemsData.jsonに改名してください。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("新しいデータベースの作成に失敗しました。\n" + ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        OrganizeFolderButton.Enabled = true;
-        DataOrganizeProgressBar.Value = 0;
-        Text = BASE_FORM_TEXT;
     }
 
     private void OrganizeFolder_FormClosing(object sender, FormClosingEventArgs e)
