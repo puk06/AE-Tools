@@ -174,7 +174,6 @@ public partial class OrganizeFolder : Form
             DataOrganizeProgressBar.Value = (int)((double)currentProgress / totalItems * 100);
             Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataOrganizeProgressBar.Value}%)";
         }
-
     }
 
     private void OrganizeFolder_FormClosing(object sender, FormClosingEventArgs e)
