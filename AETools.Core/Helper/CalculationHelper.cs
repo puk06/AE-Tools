@@ -14,7 +14,7 @@ public static class CalculationHelper
         if (maxLength == 0) return 100.0;
 
         int distance = LevenshteinDistance(source, target);
-        return (1.0 - (double)distance / maxLength) * 100;
+        return (1.0 - ((double)distance / maxLength)) * 100;
     }
 
     private static int LevenshteinDistance(string s1, string s2)
