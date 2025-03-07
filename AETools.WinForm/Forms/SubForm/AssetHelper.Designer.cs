@@ -92,6 +92,7 @@
             // 
             SuggestedBoothItemList.Font = new Font("Yu Gothic UI", 12F);
             SuggestedBoothItemList.FormattingEnabled = true;
+            SuggestedBoothItemList.HorizontalScrollbar = true;
             SuggestedBoothItemList.ItemHeight = 21;
             SuggestedBoothItemList.Location = new Point(16, 202);
             SuggestedBoothItemList.Name = "SuggestedBoothItemList";
