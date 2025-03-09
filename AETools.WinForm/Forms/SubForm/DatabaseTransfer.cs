@@ -89,6 +89,13 @@ public partial class DatabaseTransfer : Form
                 return;
             }
 
+            if (dataFolderPath == dataOutputDestination)
+            {
+                MessageBox.Show("データフォルダとデータ出力先フォルダが同じです。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ConvertDataButton.Enabled = true;
+                return;
+            }
+
             var confirmDialogResult = MessageBox.Show("この操作は、データフォルダ内のファイルをコピーし、新しいフォルダに貼り付けます。\nこの操作は、データフォルダ内のファイルをコピーするため、容量を多く消費します。続行しますか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (confirmDialogResult == DialogResult.No)
             {

@@ -19,7 +19,7 @@ public class FileSystemHelper
 
         foreach (FileInfo file in sourceInfo.GetFiles())
         {
-            file.CopyTo(Path.Combine(destination, file.Name));
+            file.CopyTo(Path.Combine(destination, file.Name), true);
         }
 
         foreach (DirectoryInfo directory in sourceInfo.GetDirectories())

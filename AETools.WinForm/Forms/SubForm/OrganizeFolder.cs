@@ -86,6 +86,13 @@ public partial class OrganizeFolder : Form
                 return;
             }
 
+            if (dataFolderPath == dataOutputDestination)
+            {
+                MessageBox.Show("データフォルダとデータ出力先フォルダが同じです。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OrganizeFolderButton.Enabled = true;
+                return;
+            }
+
             if (Directory.Exists(dataOutputDestination) && Directory.GetFiles(dataOutputDestination).Length > 0)
             {
                 var result = MessageBox.Show("データ出力先フォルダにある既存のデータは削除されます。よろしいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
