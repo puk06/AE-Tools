@@ -8,7 +8,6 @@ public partial class Main : Form
     private OrganizeFolder organizeFolder = new();
     private AssetHelper assetHelper = new();
 
-
     public Main()
     {
         InitializeComponent();
