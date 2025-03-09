@@ -152,6 +152,7 @@ public partial class OrganizeFolder : Form
     private void OrganizeAvatarExplorerItems(AvatarExplorerItem[] items, string source, string destination)
     {
         var totalItems = items.Length;
+        var avatarDictionary = new Dictionary<string, string>();
 
         var currentProgress = 0;
         foreach (var item in items)
@@ -162,6 +163,7 @@ public partial class OrganizeFolder : Form
             if (!Directory.Exists(Path.Combine(itemFolderPath))) continue;
             var folderName = Path.GetFileName(itemFolderPath);
             var dataOutputDestinationFolder = Path.Combine(dataOutputDestination, AvatarExplorerItemTypeHelper.GetCategoryName(item.Type, item.CustomCategory), folderName);
+            if (item.Type == AvatarExplorerItemType.Avatar) avatarDictionary.Add(item.ItemPath, dataOutputDestinationFolder);
 
             if (!Directory.Exists(dataOutputDestinationFolder)) Directory.CreateDirectory(dataOutputDestinationFolder);
             item.ItemPath = dataOutputDestinationFolder;
@@ -183,6 +185,25 @@ public partial class OrganizeFolder : Form
             currentProgress++;
             DataOrganizeProgressBar.Value = (int)((double)currentProgress / totalItems * 100);
             Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataOrganizeProgressBar.Value}%)";
+        }
+
+        // Update supported avatar path
+        foreach (var item2 in items)
+        {
+            var newSupportedAvatar = Array.Empty<string>();
+            foreach (var supportedAvatar in item2.SupportedAvatar)
+            {
+                if (avatarDictionary.ContainsKey(supportedAvatar))
+                {
+                    newSupportedAvatar = newSupportedAvatar.Append(avatarDictionary[supportedAvatar]).ToArray();
+                }
+                else
+                {
+                    newSupportedAvatar = newSupportedAvatar.Append(supportedAvatar).ToArray();
+                }
+            }
+
+            item2.SupportedAvatar = newSupportedAvatar;
         }
     }
 
