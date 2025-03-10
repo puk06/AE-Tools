@@ -7,6 +7,7 @@ public partial class Main : Form
     private DatabaseTransfer databaseTransfer = new();
     private OrganizeFolder organizeFolder = new();
     private AssetHelper assetHelper = new();
+    private ReacquisitionData reacquisitionData = new();
 
     public Main()
     {
@@ -26,6 +27,11 @@ public partial class Main : Form
     private void AssetHelper_Click(object sender, EventArgs e)
     {
         assetHelper.Visible = true;
+    }
+
+    private void ReacquisitionData_Click(object sender, EventArgs e)
+    {
+        reacquisitionData.Visible = true;
     }
 }
 

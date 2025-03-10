@@ -32,6 +32,7 @@
             DatabaseTransfer = new Button();
             OrganizeFolder = new Button();
             AssetHelper = new Button();
+            ReacquisitionData = new Button();
             SuspendLayout();
             // 
             // label1
@@ -77,11 +78,23 @@
             AssetHelper.UseVisualStyleBackColor = true;
             AssetHelper.Click += AssetHelper_Click;
             // 
+            // ReacquisitionData
+            // 
+            ReacquisitionData.Font = new Font("Yu Gothic UI", 13F);
+            ReacquisitionData.Location = new Point(12, 226);
+            ReacquisitionData.Name = "ReacquisitionData";
+            ReacquisitionData.Size = new Size(352, 51);
+            ReacquisitionData.TabIndex = 6;
+            ReacquisitionData.Text = "データベース情報再取得ツール";
+            ReacquisitionData.UseVisualStyleBackColor = true;
+            ReacquisitionData.Click += ReacquisitionData_Click;
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(376, 450);
+            Controls.Add(ReacquisitionData);
             Controls.Add(AssetHelper);
             Controls.Add(OrganizeFolder);
             Controls.Add(DatabaseTransfer);
@@ -101,5 +114,6 @@
         private Button DatabaseTransfer;
         private Button OrganizeFolder;
         private Button AssetHelper;
+        private Button ReacquisitionData;
     }
 }
