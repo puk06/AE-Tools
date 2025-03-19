@@ -3,7 +3,7 @@
 <div align="center">
   <strong>:high_brightness: A Useful Tool For Avatar Explorer :crescent_moon:</strong><br>
   This tool/software is a collection of useful tools for Avatar Explorer<br>
-  <sub>Available for Avatar Explorer & KonoAsset.</sub>
+  <sub>Available for Avatar Explorer & KonoAsset</sub>
 </div>
 
 <h1 align="center">Features</h1>
