@@ -8,6 +8,7 @@ public partial class OrganizeFolder : Form
     private string dataFolderPath = string.Empty;
     private string dataOutputDestination = string.Empty;
     private const string BASE_FORM_TEXT = "データ整理支援ツール";
+    private readonly char[] invalidChars = Path.GetInvalidFileNameChars();
 
     public OrganizeFolder()
     {
@@ -168,8 +169,15 @@ public partial class OrganizeFolder : Form
             var thumbnailPath = item.ImagePath.Replace("./Datas", dataFolderPath);
 
             if (!Directory.Exists(Path.Combine(itemFolderPath))) continue;
+
+            var itemTitle = item.Title;
+            foreach (var invalidChar in invalidChars)
+            {
+                itemTitle = itemTitle.Replace(invalidChar, '_');
+            }
+
             var folderName = Path.GetFileName(itemFolderPath);
-            var dataOutputDestinationFolder = Path.Combine(dataOutputDestination, AvatarExplorerItemTypeHelper.GetCategoryName(item.Type, item.CustomCategory), folderName);
+            var dataOutputDestinationFolder = Path.Combine(dataOutputDestination, AvatarExplorerItemTypeHelper.GetCategoryName(item.Type, item.CustomCategory), itemTitle, folderName);
             if (item.Type == AvatarExplorerItemType.Avatar) avatarDictionary.Add(item.ItemPath, dataOutputDestinationFolder);
 
             if (!Directory.Exists(dataOutputDestinationFolder)) Directory.CreateDirectory(dataOutputDestinationFolder);
@@ -182,7 +190,7 @@ public partial class OrganizeFolder : Form
                 if (!Directory.Exists(Path.Combine(materialFolderPath))) continue;
 
                 var materialFolderName = Path.GetFileName(materialFolderPath);
-                var dataOutputDestinationMaterialFolder = Path.Combine(dataOutputDestination, AvatarExplorerItemTypeHelper.GetCategoryName(item.Type, item.CustomCategory), folderName, materialFolderName);
+                var dataOutputDestinationMaterialFolder = Path.Combine(dataOutputDestinationFolder, materialFolderName);
 
                 if (!Directory.Exists(dataOutputDestinationMaterialFolder)) Directory.CreateDirectory(dataOutputDestinationMaterialFolder);
                 item.MaterialPath = dataOutputDestinationMaterialFolder;
