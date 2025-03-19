@@ -152,8 +152,8 @@ public class DatabaseHelper
     {
         if (string.IsNullOrEmpty(destination)) return;
 
-        var itemFolderPath = avatarExplorerItem.ItemPath.Replace("./Datas", source);
-        var thumbnailPath = avatarExplorerItem.ImagePath.Replace("./Datas", source);
+        var itemFolderPath = FixRelativePathForAE(avatarExplorerItem.ItemPath, source);
+        var thumbnailPath = FixRelativePathForAE(avatarExplorerItem.ImagePath, source);
 
         //フォルダをコピーする
         if (!Directory.Exists(Path.Combine(itemFolderPath))) return;
@@ -165,7 +165,7 @@ public class DatabaseHelper
         //マテリアルパスがからじゃなければコピー
         if (!string.IsNullOrEmpty(avatarExplorerItem.MaterialPath))
         {
-            var materialFolderPath = avatarExplorerItem.MaterialPath.Replace("./Datas", source);
+            var materialFolderPath = FixRelativePathForAE(avatarExplorerItem.MaterialPath, source);
             if (!Directory.Exists(Path.Combine(materialFolderPath))) return;
             var materialFolderName = Path.GetFileName(materialFolderPath);
             var destinationMaterialFolder = Path.Combine(destination, "data", itemId, folderName, materialFolderName);
@@ -192,5 +192,21 @@ public class DatabaseHelper
         }
 
         return supportedAvatarNames.ToArray();
+    }
+
+    public static string FixRelativePathForAE(string path, string dataFolderPath)
+    {
+        if (path.StartsWith("./Datas"))
+        {
+            return path.Replace("./Datas", dataFolderPath);
+        }
+        else if (path.StartsWith("Datas"))
+        {
+            return path.Replace("Datas", dataFolderPath);
+        }
+        else
+        {
+            return path;
+        }
     }
 }

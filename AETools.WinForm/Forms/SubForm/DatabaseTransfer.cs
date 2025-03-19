@@ -69,7 +69,7 @@ public partial class DatabaseTransfer : Form
         }
     }
 
-    private void ConvertDataButton_Click(object sender, EventArgs e)
+    private async void ConvertDataButton_Click(object sender, EventArgs e)
     {
         try
         {
@@ -161,6 +161,8 @@ public partial class DatabaseTransfer : Form
                 currentProgress++;
                 DataTransferProgressBar.Value = Math.Min((int)((double)currentProgress / totalItems * 100), 100);
                 Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataTransferProgressBar.Value}%)";
+
+                await Task.Delay(50);
             }
 
             var destinationFolder = Path.Combine(dataOutputDestination, "metadata");

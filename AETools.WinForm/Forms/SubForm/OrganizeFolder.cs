@@ -67,7 +67,7 @@ public partial class OrganizeFolder : Form
         }
     }
 
-    private void OrganizeFolderButton_Click(object sender, EventArgs e)
+    private async void OrganizeFolderButton_Click(object sender, EventArgs e)
     {
         try
         {
@@ -122,7 +122,7 @@ public partial class OrganizeFolder : Form
             if (Directory.Exists(dataOutputDestination)) Directory.Delete(dataOutputDestination, true);
             Directory.CreateDirectory(dataOutputDestination);
 
-            OrganizeAvatarExplorerItems(aEDatabase.Items, dataFolderPath, dataOutputDestination);
+            await OrganizeAvatarExplorerItems(aEDatabase.Items, dataFolderPath, dataOutputDestination);
 
             MessageBox.Show("データの整理が完了しました。", "完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -157,7 +157,7 @@ public partial class OrganizeFolder : Form
         }
     }
 
-    private void OrganizeAvatarExplorerItems(AvatarExplorerItem[] items, string source, string destination)
+    private async Task OrganizeAvatarExplorerItems(AvatarExplorerItem[] items, string source, string destination)
     {
         var totalItems = items.Length;
         var avatarDictionary = new Dictionary<string, string>();
@@ -165,8 +165,8 @@ public partial class OrganizeFolder : Form
         var currentProgress = 0;
         foreach (var item in items)
         {
-            var itemFolderPath = item.ItemPath.Replace("./Datas", dataFolderPath);
-            var thumbnailPath = item.ImagePath.Replace("./Datas", dataFolderPath);
+            var itemFolderPath = DatabaseHelper.FixRelativePathForAE(item.ItemPath, dataFolderPath);
+            var thumbnailPath = DatabaseHelper.FixRelativePathForAE(item.ImagePath, dataFolderPath);
 
             if (!Directory.Exists(Path.Combine(itemFolderPath))) continue;
 
@@ -186,7 +186,7 @@ public partial class OrganizeFolder : Form
 
             if (!string.IsNullOrEmpty(item.MaterialPath))
             {
-                var materialFolderPath = item.MaterialPath.Replace("./Datas", dataFolderPath);
+                var materialFolderPath = DatabaseHelper.FixRelativePathForAE(item.MaterialPath, dataFolderPath);
                 if (!Directory.Exists(Path.Combine(materialFolderPath))) continue;
 
                 var materialFolderName = Path.GetFileName(materialFolderPath);
@@ -200,6 +200,8 @@ public partial class OrganizeFolder : Form
             currentProgress++;
             DataOrganizeProgressBar.Value = (int)((double)currentProgress / totalItems * 100);
             Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataOrganizeProgressBar.Value}%)";
+
+            await Task.Delay(50);
         }
 
         // Update supported avatar path
