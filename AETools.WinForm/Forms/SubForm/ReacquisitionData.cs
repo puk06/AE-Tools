@@ -89,7 +89,7 @@ public partial class ReacquisitionData : Form
                     currentProgress++;
                     DataReacquisitionProgressBar.Value = Math.Min((int)((double)currentProgress / totalItems * 100), 100);
                     Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataReacquisitionProgressBar.Value}%)";
-                    Task.Delay(2000).Wait();
+                    Task.Delay(4000).Wait();
                     continue;
                 }
 
@@ -132,7 +132,7 @@ public partial class ReacquisitionData : Form
                 currentProgress++;
                 DataReacquisitionProgressBar.Value = Math.Min((int)((double)currentProgress / totalItems * 100), 100);
                 Text = $"{BASE_FORM_TEXT} - {currentProgress}/{totalItems} ({DataReacquisitionProgressBar.Value}%)";
-                Task.Delay(2000).Wait();
+                Task.Delay(4000).Wait();
             }
 
             DatabaseHelper.SaveAEDatabase(aEDatabaseFilePath, aEDatabase.Items);
