@@ -35,3 +35,11 @@
   > 拡張機能は https://github.com/puk06/Booth-Library-Database-Maker ここにアクセス後、下にリンクがあります！
   >
   > Tampermonkeyなどの、拡張機能を追加することが出来る拡張機能を先にインポートしておいてください！
+
+<br>
+
+- アイテム情報再取得ツール
+  
+  > KonoAssetからAvatar Explorerにデータを移行した際に、不足している情報やファイルなどを再取得します
+  > 
+  > Boothのサーバーへの負荷軽減のため、アイテムごとに4秒の遅延があります。
